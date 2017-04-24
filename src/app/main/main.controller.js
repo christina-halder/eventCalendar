@@ -18,11 +18,11 @@
           right: 'today prev,next'
         },
         eventClick: function(event, element) {
-          // $scope.eventDate  = event.start.getDate();
+          $scope.eventId = event.id;
+          $scope.eventDate = event.start['_d'].getDate();
           $scope.eventName = event.title;
-          // $scope.eventMonth = event.start.getMonth();
-          // $scope.eventYear = event.start.getYear();
-          console.log( event.start);
+          $scope.eventMonth = event.start['_d'].getMonth().toString();
+          $scope.eventYear = event.start['_d'].getFullYear();
         },
         eventDrop: $scope.alertOnDrop,
         eventResize: $scope.alertOnResize
@@ -50,7 +50,7 @@
 
     $scope.eventDate  = 0;
     $scope.eventName = "";
-    $scope.eventMonth = 0;
+    $scope.eventMonth = "0";
     $scope.eventYear = 0;
     $scope.submitEvent = function(e) {
       $http({
@@ -66,8 +66,8 @@
       }).then(function(){
         $scope.eventName = "";
         $scope.eventDate  = 0;
-        $scope.eventMonth = 0;
-        $scope.eventYear = 2017;
+        $scope.eventMonth = "";
+        $scope.eventYear = 0;
         $scope.events = [];
         allEvents();
       });
