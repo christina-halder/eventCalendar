@@ -1,6 +1,5 @@
 <div class="container">
   <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
-
   <div>
     <input type="hidden" ng-model="eventId">
     <label> Add event </label>
@@ -30,6 +29,12 @@
     <label> Year </label>
     <input type="number" ng-model="eventYear"/>
     <br>
-    <button ng-click = "submitEvent()"> Add event </button>
+    <div ng-if="showSubmitButton">
+      <button ng-click = "submitEvent()"> Add event </button>
+    </div>
+    <div ng-if="showEditDeleteButton">
+      <button ng-click = "editEvent()"> Edit event </button>
+      <button ng-click = "deleteEvent()"> Delete Event</button>
+    </div>
   </div>
 </div>

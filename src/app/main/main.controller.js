@@ -8,6 +8,8 @@
   /** @ngInject */
   function MainController($scope, $http, $timeout, webDevTec, toastr, uiCalendarConfig) {
 
+    $scope.showSubmitButton = true;
+    $scope.showEditDeleteButton = false;
     $scope.uiConfig = {
       calendar:{
         height: 450,
@@ -23,6 +25,8 @@
           $scope.eventName = event.title;
           $scope.eventMonth = event.start['_d'].getMonth().toString();
           $scope.eventYear = event.start['_d'].getFullYear();
+          $scope.showSubmitButton = false;
+          $scope.showEditDeleteButton = true;
         },
         eventDrop: $scope.alertOnDrop,
         eventResize: $scope.alertOnResize
@@ -48,6 +52,7 @@
 
     allEvents();
 
+    $scope.eventId = 0;
     $scope.eventDate  = 0;
     $scope.eventName = "";
     $scope.eventMonth = "0";
@@ -69,6 +74,30 @@
         $scope.eventMonth = "";
         $scope.eventYear = 0;
         $scope.events = [];
+        allEvents();
+      });
+    };
+
+    $scope.editEvent = function (e) {
+
+    };
+
+    $scope.deleteEvent = function (e) {
+      $http({
+        method: 'DELETE',
+        url: 'http://localhost:3002/api/events/'  + $scope.eventId,
+        data: $.param({
+          id: $scope.eventId
+        }),
+        headers: { 'Content-Type': 'application/json;charset=utf-8' }
+      }).then(function(){
+        $scope.eventName = "";
+        $scope.eventDate  = 0;
+        $scope.eventMonth = "";
+        $scope.eventYear = "0";
+        $scope.events = [];
+        $scope.showSubmitButton = true;
+        $scope.showEditDeleteButton = false;
         allEvents();
       });
     };
