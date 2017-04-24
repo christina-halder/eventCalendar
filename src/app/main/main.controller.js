@@ -17,35 +17,41 @@
           center: 'title',
           right: 'today prev,next'
         },
-        eventClick: $scope.alertEventOnClick,
+        eventClick: function(event, element) {
+          // $scope.eventDate  = event.start.getDate();
+          $scope.eventName = event.title;
+          // $scope.eventMonth = event.start.getMonth();
+          // $scope.eventYear = event.start.getYear();
+          console.log( event.start);
+        },
         eventDrop: $scope.alertOnDrop,
         eventResize: $scope.alertOnResize
       }
     };
 
-    $http({
-      method: 'GET',
-      url: 'http://localhost:3002/api/events'
-    }).then(function successCallback(response) {
-      // console.log(response.data);
-      // var length = response.data.length
+    var allEvents = function() {
+      $http({
+        method: 'GET',
+        url: 'http://localhost:3002/api/events'
+      }).then(function successCallback(response) {
+        for(var i = 0; i < response.data.length ; i++) {
+          var event = response.data[i];
+          $scope.events.push({
+            id: event.id,
+            title: event.name,
+            start: new Date(event.year, 3, event.date),
+            allDay: true
+          });
+        }
+      }, function errorCallback(response) {});
+    };
 
-      for(var i = 0; i < response.data.length ; i++) {
-        var event = response.data[i];
-        $scope.events.push({
-          id: event.id,
-          title: event.name,
-          start: new Date(event.year, 3, event.date),
-          allDay: true
-        });
-      }
-    }, function errorCallback(response) {});
+    allEvents();
 
     $scope.eventDate  = 0;
     $scope.eventName = "";
     $scope.eventMonth = 0;
     $scope.eventYear = 0;
-
     $scope.submitEvent = function(e) {
       $http({
         method: 'POST',
@@ -54,7 +60,7 @@
             name: $scope.eventName,
             date: $scope.eventDate,
             month: $scope.eventMonth,
-            year: $scope.eventYear,
+            year: $scope.eventYear
           }),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).then(function(){
@@ -62,6 +68,8 @@
         $scope.eventDate  = 0;
         $scope.eventMonth = 0;
         $scope.eventYear = 2017;
+        $scope.events = [];
+        allEvents();
       });
     };
 
