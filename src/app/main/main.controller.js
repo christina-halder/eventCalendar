@@ -55,7 +55,7 @@
     $scope.eventId = 0;
     $scope.eventDate  = 0;
     $scope.eventName = "";
-    $scope.eventMonth = "0";
+    $scope.eventMonth = "";
     $scope.eventYear = 0;
     $scope.submitEvent = function(e) {
       $http({
@@ -83,23 +83,31 @@
     };
 
     $scope.deleteEvent = function (e) {
-      $http({
-        method: 'DELETE',
-        url: 'http://localhost:3002/api/events/'  + $scope.eventId,
-        data: $.param({
-          id: $scope.eventId
-        }),
-        headers: { 'Content-Type': 'application/json;charset=utf-8' }
-      }).then(function(){
-        $scope.eventName = "";
-        $scope.eventDate  = 0;
-        $scope.eventMonth = "";
-        $scope.eventYear = "0";
-        $scope.events = [];
-        $scope.showSubmitButton = true;
-        $scope.showEditDeleteButton = false;
+      $http.delete('http://localhost:3002/api/events/'  + $scope.eventId)
+        .then(function(){
+          $scope.eventName = "";
+          $scope.eventDate  = 0;
+          $scope.eventMonth = "";
+          $scope.eventYear = "";
+          $scope.events = [];
+          $scope.showSubmitButton = true;
+          $scope.showEditDeleteButton = false;
         allEvents();
       });
+
+    //   $http.delete('http://localhost:3002/api/events/'+$scope.eventId,
+    //     {
+    //       params: {
+    //         Id: $scope.eventId
+    //       }
+    //     }).then(res=>{
+    //     $scope.eventName="";  $scope.eventDate=0;  $scope.eventMonth="";  $scope.eventYear="0";  $scope.events=[
+    //
+    //   ];  $scope.showSubmitButton=true;  $scope.showEditDeleteButton=false;  allEvents();
+    // }).catch(err=>{
+    //     returnerr;
+    // });
+
     };
 
     $scope.events = [];
